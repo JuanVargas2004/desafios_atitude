@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { IconChartBar, IconGraph } from '@tabler/icons-react'
 import propsCard from "@/interfaces/card"
-import Input from "./input"
 
 export default function Card(props:propsCard){
 
@@ -11,15 +10,17 @@ export default function Card(props:propsCard){
     const [total, setTotal] = useState(props.total ?? 0)
 
     function changePercent(){
-        const novo_valor = document.querySelector("#percentId").value
+        const input = document.querySelector("#percentId") as HTMLInputElement
+        const novo_valor = input.value
 
-        if (novo_valor){
+        if (novo_valor){    
             setPercentual(parseInt(novo_valor))
         }
     }
 
     function changeTotal(){
-        const novo_valor = document.querySelector("#totalId").value
+        const input = document.querySelector("#totalId") as HTMLInputElement
+        const novo_valor = input.value
         
         if (novo_valor){
             setTotal(parseInt(novo_valor))
