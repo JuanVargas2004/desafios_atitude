@@ -1,9 +1,9 @@
-import Formulario from "@/components/formulario";
+import Register from "@/components/register";
 
 export default function Home() {
   return (
 
-    <Formulario></Formulario>
+    <Register></Register>
 
   );
 }
