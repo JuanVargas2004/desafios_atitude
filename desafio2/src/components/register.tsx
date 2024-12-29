@@ -44,7 +44,7 @@ export default function Register() {
                         <label htmlFor="email" className="text-end">Nome: </label>
                         <input type="text"
                                 name="nome"
-                                placeholder="Digite seu E-mail"
+                                placeholder="Digite seu Nome"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 className="text-black px-2 py-1"/>
