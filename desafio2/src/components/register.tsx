@@ -1,12 +1,16 @@
 'use client'
 import Link from "next/link"
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Register() {
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
+    const [cpf, setCpf] = useState('')
     const [password, setPassword] = useState('')
+
+    const router = useRouter()
 
 
 
@@ -21,8 +25,11 @@ export default function Register() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({name, email, password})
+                body: JSON.stringify({name, email, cpf, password})
             })
+
+            alert("Registro feito com sucesso!")
+            router.push('/')
 
         } catch (err) {
             console.error(err)
@@ -56,6 +63,15 @@ export default function Register() {
                                 placeholder="Digite seu E-mail"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                className="text-black px-2 py-1"/>
+                    </div>
+                    <div className="flex justify-between">
+                        <label htmlFor="cpf">CPF: </label>
+                        <input type="text"
+                                name="cpf"
+                                placeholder="Digite seu CPF"
+                                value={cpf}
+                                onChange={(e) => setCpf(e.target.value)}
                                 className="text-black px-2 py-1"/>
                     </div>
                     <div className="flex justify-between">

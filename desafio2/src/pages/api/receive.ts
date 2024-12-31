@@ -3,27 +3,29 @@ import { NextApiResponse, NextApiRequest } from 'next';
 
 interface ResponseData{
     message?: string,
-    name?: String,
+    name?: string,
     email?: string,
+    cpf?: string,
     password?: string,
 }
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseData>){
     
-    const {name, email, password } = req.body;
+    const {name, email, cpf, password } = req.body;
 
     if (req.method == 'POST'){
 
-        if (name && email && password){
+        if (name && email && cpf && password){
 
-            await send_user(name, email, password)
+            await send_user(name, email, cpf, password)
 
 
             res.status(200).json({
                 message: "Success",
                 name: String(name),
                 email: String(email),
+                cpf: String(cpf),
                 password: String(email),
             })
 
