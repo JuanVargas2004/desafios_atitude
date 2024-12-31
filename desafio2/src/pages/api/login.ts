@@ -18,12 +18,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if(password == user.password){
 
                     const name = user.name
+                    const id = user.id
 
-                    const payload = {email, name}
+                    const payload = {id, email, name}
 
                     const token = jwt.sign(payload, SECRET_KEY, {expiresIn: '1h'})
 
-                    res.setHeader('Set-Cookie', `token=${token}; Path=/; Max-Age=900; HttpOnly;`)
+                    res.setHeader('Set-Cookie', `token=${token}; Path=/; Max-Age=3600;`)
 
                     res.status(200).json({message: "Sucess", email: email, password: password})
 
