@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import Cookies from 'js-cookie'
 
 export default function Welcome(){
     
@@ -15,6 +16,11 @@ export default function Welcome(){
 
     if (!isMounted){
         return null
+    }
+
+    const handleQuit = () => {
+        Cookies.remove('token')
+        router.refresh()
     }
 
     return(
@@ -57,7 +63,7 @@ export default function Welcome(){
             </Link> */}
             
 
-            <div onClick={() => {router.push('/')}} className="flex justify-center">
+            <div onClick={handleQuit} className="flex justify-center">
                 <input 
                     type="submit" 
                     value="Sair"

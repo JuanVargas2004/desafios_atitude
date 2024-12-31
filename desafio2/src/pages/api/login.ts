@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from '@/functions/prismaClient'
+import jwt from 'jsonwebtoken'
 
+const SECRET_KEY = String(process.env.SECRET_KEY)
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
     if (req.method === "POST"){
@@ -22,6 +24,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                     if (password == user.password){
 
+                        const id = user.id
+                        const name = user.name
+
+                        const payload = {id, name, email, password}
+                    
+                        const token = jwt.sign(payload, SECRET_KEY, {expiresIn: '1h'})
+
+                        res.setHeader('Set-Cookie', `token=${token}; Path=/; Max-Age=3600`)
                         res.status(200).json({message: 'Sucess'})
 
                     } else {
