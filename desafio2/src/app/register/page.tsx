@@ -1,7 +1,12 @@
+'use client'
 import Register from "@/components/register";
+export default function Home() {
+  return (
+    <div>
 
-export default function LoginPage(){
-    return (
-        <Register/>
-    )
+      <Register/>
+
+
+    </div>
+  );
 }

@@ -1,83 +1,105 @@
 'use client'
-import Link from "next/link"
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
-export default function Login() {
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+
+export default function Login(){
+    
+    const [isMounted, setIsMounted] = useState(false)
+    const router = useRouter()
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const router = useRouter()
+
+    const payload = {email, password}
+
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
+
+    if(!isMounted){
+        return null
+    }
 
     const handleSubmit = async (event: React.FormEvent) => {
-        
-        event.preventDefault();
+        event.preventDefault()
 
-        try {
+        const response = await fetch('api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
 
-            const response = await fetch('api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({email, password})
-            })
-
-
-            if (response.ok) {
-                router.push('welcome/');
-            } else {
-                alert("Credenciais inválidas");
-            }
-
-
-        } catch (err) {
-            console.error(err)
-            alert("Ocorreu um erro ao logar.")
+        if (response.ok) {
+            alert("Logado com Sucesso!")
+            router.push('welcome/')
+        } else if (response.status === 400) {
+            alert("Preencha todos os campos.")
+        } else if (response.status === 300) {
+            alert("E-mail ou senha inválidos.")
+        } else if (response.status === 500) {
+            alert("Erro interno")
+        } else {
+            alert("Falha ao tentar logar. Tente novamente.")
         }
     }
 
-
     return (
+        <div className="h-screen flex items-center justify-center">
 
-        <div className="flex h-screen justify-center items-center">
+            <form onSubmit={handleSubmit} method="POST" className="bg-gray-900 px-12 py-9 rounded-3xl">
 
-            <form onSubmit={handleSubmit} method="post" name="register" className="bg-gray-900 px-12 py-16 rounded-3xl">
-
-                <p className="text-center text-2xl font-medium mb-8">Login</p>
+                <h1 className="text-center text-2xl font-medium mb-8">Login</h1>
 
                 <div className="flex flex-col gap-3">
-                    <div className="flex justify-between">
-                        <label htmlFor="email">E-mail: </label>
-                        <input type="email"
-                                name="email"
-                                placeholder="Digite seu E-mail"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="text-black px-2 py-1"/>
+
+                    <div className="container_input_form">
+                        <label htmlFor="email">E-mail:</label>
+                        <input 
+                            type="email" 
+                            name="email" 
+                            id="email"
+                            placeholder="Digite seu e-mail"
+                            className="input_form"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            />
                     </div>
-                    <div className="flex justify-between">
-                        <label htmlFor="password">Senha: </label>
-                        <input type="password"
-                                name="password"
-                                placeholder="Digite sua Senha"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="text-black px-2 py-1"/>
+                    <div className="container_input_form">
+                        <label htmlFor="password">Senha:</label>
+                        <input 
+                            type="password" 
+                            name="password" 
+                            id="password"
+                            placeholder="Digite sua senha"
+                            className="input_form"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            />
                     </div>
+
+                    <div className="flex justify-center">
+                        <input 
+                            type="submit" 
+                            value="Enviar"
+                            className="button_form bg-green-600 active:bg-green-800 mt-3"
+                            />
+                    </div>
+
+                    <h2 className="text-center text-[.8rem] text-[#d4d4d4] mt-4">
+                        Ainda não possuí conta? Registre-se <Link href={'register/'} className="text-green-400 active:text-green-600">aqui</Link>
+                    </h2>
+
+
                 </div>
 
-                <div className="flex justify-center mt-5">
-                    <input type="submit" value="Enviar"
-                           className="bg-green-700 px-2 py-1 rounded-md cursor-pointer active:bg-green-900 hover:scale-[1.05] transition ease"/>
-                </div>
-
-                <p className="mt-5 text-xs">Não possui uma conta? Registre seus dados <Link className="text-green-500 active:text-green-700" href="register/">aqui</Link></p>
-            
             </form>
 
-        </div>
 
+        </div>
     )
-    
 }

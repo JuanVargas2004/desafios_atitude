@@ -1,53 +1,55 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import login from '@/functions/logging';
-import jwt from 'jsonwebtoken';
-
-const SECRET_KEY = String(process.env.SECRET_KEY)
+import { NextApiRequest, NextApiResponse } from "next";
+import prisma from '@/functions/prismaClient'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
-    const { email, password } = req.body
-
     if (req.method === "POST"){
 
+        const {email, password} = req.body
+
         if (email && password){
+            
+            try {
 
-            const user = await login(email)
 
-            if (user){
-                if(password == user.password){
+                const user = await prisma.user_credentials.findFirst({
+                    where: {
+                        email: email
+                    }
+                })
 
-                    const name = user.name
-                    const id = user.id
+                if (user) {
 
-                    const payload = {id, email, name}
+                    if (password == user.password){
 
-                    const token = jwt.sign(payload, SECRET_KEY, {expiresIn: '1h'})
+                        res.status(200).json({message: 'Sucess'})
 
-                    res.setHeader('Set-Cookie', `token=${token}; Path=/; Max-Age=3600;`)
+                    } else {
 
-                    res.status(200).json({message: "Sucess", email: email, password: password})
-
+                        res.status(401).json({message: 'Invalid credentials'})
+                    
+                    }
+                    
+                    
                 } else {
-
-                    res.status(404).json({message: "Credenciais Inválidas"})
+                    res.status(401).json({message: 'Invalid credentials'})
                 }
 
-            } else {
+            } catch (e) {
 
-                res.status(404).json({message: "Credenciais Inválidas"})
+                res.status(500).json({message: 'Data error'})
+
             }
 
         } else {
-
-            res.status(400).json({message: "Email e senha são obrigatórios"})
+            res.status(400).json({message: 'Missing fields'})
         }
+
 
     } else {
 
-        res.setHeader("Allow", ["POST"])
-        res.status(405).end(`Método ${req.method} não permitido`)
-        
-    }
+        res.setHeader('Allow', ['POST'])
+        res.status(405).json({message: 'Method not allowed'})
 
+    }
 }

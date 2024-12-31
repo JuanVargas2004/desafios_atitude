@@ -20,13 +20,28 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.input{
+.input_form{
   color: black;
-  padding: .1rem .5rem;
+  padding: .25rem .50rem;
+  border-radius: 4px;
 }
 
-.container_input{
+
+.container_input_form{
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: .75rem;
+  text-align: end;
+}
+
+.button_form{
+  padding: .25rem .50rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: ease .3s;
+}
+
+.button_form:hover{
+  transform: scale(1.05);
 }
