@@ -25,7 +25,7 @@ export default function Login() {
 
 
             if (response.ok) {
-                router.push('register/');
+                router.push('welcome/');
             } else {
                 alert("Credenciais inválidas");
             }
@@ -33,7 +33,7 @@ export default function Login() {
 
         } catch (err) {
             console.error(err)
-            alert("Ocorreu um erro ao registrar.")
+            alert("Ocorreu um erro ao logar.")
         }
     }
 
