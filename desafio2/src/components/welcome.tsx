@@ -4,11 +4,13 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Cookies from 'js-cookie'
+import jwt from 'jsonwebtoken'
 
 export default function Welcome(){
     
     const [isMounted, setIsMounted] = useState(false)
     const router = useRouter()
+    
 
     useEffect(() => {
         setIsMounted(true)
@@ -20,14 +22,27 @@ export default function Welcome(){
 
     const handleQuit = () => {
         Cookies.remove('token')
-        router.refresh()
+        router.push('/')
+    }
+
+    const token = Cookies.get('token')
+
+    if (token){
+        const decode = jwt.decode(token)
+
+        if (decode && typeof decode === 'object'){
+
+            var username = decode.name
+
+        }
+
     }
 
     return(
 
         <div className="h-screen flex flex-col items-center justify-center gap-2">
 
-            <h1 className="text-3xl">Olá, <b>Usuário</b>!</h1>
+            <h1 className="text-3xl">Olá, <b>{username}</b>!</h1>
             <h1 className="text-2xl italic mb-4">O que deseja acessar?</h1>
 
             <Link href={'forms/personal'} className="flex justify-center">
@@ -62,12 +77,20 @@ export default function Welcome(){
                 />
             </Link> */}
             
+            <div onClick={() => {router.push('/forms/delete')}}className="flex justify-center">
+                <input 
+                    type="submit" 
+                    value="Excluir Conta"
+                    className="button_form bg-slate-500 active:bg-slate-700 mt-5"
+                />
+            </div>
+
 
             <div onClick={handleQuit} className="flex justify-center">
                 <input 
                     type="submit" 
                     value="Sair"
-                    className="button_form bg-red-500 active:bg-red-700 mt-5"
+                    className="button_form bg-red-500 active:bg-red-700"
                 />
             </div>
             
